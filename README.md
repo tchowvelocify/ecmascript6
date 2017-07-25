@@ -2172,6 +2172,14 @@ Other Style Guides
 ## Whitespace
 
   <a name="whitespace--spaces"></a><a name="18.1"></a>
+  - [19.0](#whitespace--linebreaks) Use \n for line breaks, not CRLF. To make Visual Studio Code use \n, set user setting "file.eol" to "\n". eslint: [`linebreak-style`](http://eslint.org/docs/rules/linebreak-style.html)
+
+    ```json
+    {
+      "file.eol": "\n"
+    }
+    ```
+
   - [19.1](#whitespace--spaces) Use soft tabs (space character) set to 2 spaces. eslint: [`indent`](http://eslint.org/docs/rules/indent.html) jscs: [`validateIndentation`](http://jscs.info/rule/validateIndentation)
 
     ```javascript

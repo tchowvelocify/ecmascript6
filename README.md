@@ -603,17 +603,10 @@ Other Style Guides
 ## Functions
 
   <a name="functions--declarations"></a><a name="7.1"></a>
-  - [7.1](#functions--declarations) Use named function expressions instead of function declarations. eslint: [`func-style`](http://eslint.org/docs/rules/func-style) jscs: [`disallowFunctionDeclarations`](http://jscs.info/rule/disallowFunctionDeclarations)
-
-    > Why? Function declarations are hoisted, which means that it’s easy - too easy - to reference the function before it is defined in the file. This harms readability and maintainability. If you find that a function’s definition is large or complex enough that it is interfering with understanding the rest of the file, then perhaps it’s time to extract it to its own module! Don’t forget to name the expression - anonymous functions can make it harder to locate the problem in an Error’s call stack. ([Discussion](https://github.com/airbnb/javascript/issues/794))
+  - [7.1](#functions--declarations) For function variables, we favor named functions to anonymous functions, though anonymous functions are acceptable. Named functions have the advantage of being more identifiable in stack traces. eslint: [`func-style`](http://eslint.org/docs/rules/func-style) jscs: [`disallowFunctionDeclarations`](http://jscs.info/rule/disallowFunctionDeclarations)
 
     ```javascript
-    // bad
-    function foo() {
-      // ...
-    }
-
-    // bad
+    // meh
     const foo = function () {
       // ...
     };
@@ -638,26 +631,6 @@ Other Style Guides
 
   <a name="functions--in-blocks"></a><a name="7.3"></a>
   - [7.3](#functions--in-blocks) Never declare a function in a non-function block (`if`, `while`, etc). Assign the function to a variable instead. Browsers will allow you to do it, but they all interpret it differently, which is bad news bears. eslint: [`no-loop-func`](http://eslint.org/docs/rules/no-loop-func.html)
-
-  <a name="functions--note-on-blocks"></a><a name="7.4"></a>
-  - [7.4](#functions--note-on-blocks) **Note:** ECMA-262 defines a `block` as a list of statements. A function declaration is not a statement. [Read ECMA-262’s note on this issue](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf#page=97).
-
-    ```javascript
-    // bad
-    if (currentUser) {
-      function test() {
-        console.log('Nope.');
-      }
-    }
-
-    // good
-    let test;
-    if (currentUser) {
-      test = () => {
-        console.log('Yup.');
-      };
-    }
-    ```
 
   <a name="functions--arguments-shadow"></a><a name="7.5"></a>
   - [7.5](#functions--arguments-shadow) Never name a parameter `arguments`. This will take precedence over the `arguments` object that is given to every function scope.
@@ -765,7 +738,7 @@ Other Style Guides
     ```
 
   <a name="functions--signature-spacing"></a><a name="7.11"></a>
-  - [7.11](#functions--signature-spacing) Spacing in a function signature. eslint: [`space-before-function-paren`](http://eslint.org/docs/rules/space-before-function-paren) [`space-before-blocks`](http://eslint.org/docs/rules/space-before-blocks)
+  - [7.11](#functions--signature-spacing) In an anonymous function, no space should be between the function keyword and the opening paranthesis. For any function, there should always be a space between the closing paranthesis and the opening curly brace. eslint: [`space-before-function-paren`](http://eslint.org/docs/rules/space-before-function-paren) [`space-before-blocks`](http://eslint.org/docs/rules/space-before-blocks)
 
     > Why? Consistency is good, and you shouldn’t have to add or remove a space when adding or removing a name.
 
@@ -773,28 +746,10 @@ Other Style Guides
     // bad
     const f = function(){};
     const g = function (){};
+
+    // good
     const h = function() {};
-
-    // good
-    const x = function () {};
-    const y = function a() {};
-    ```
-
-  <a name="functions--mutate-params"></a><a name="7.12"></a>
-  - [7.12](#functions--mutate-params) Never mutate parameters. eslint: [`no-param-reassign`](http://eslint.org/docs/rules/no-param-reassign.html)
-
-    > Why? Manipulating objects passed in as parameters can cause unwanted variable side effects in the original caller.
-
-    ```javascript
-    // bad
-    function f1(obj) {
-      obj.key = 1;
-    }
-
-    // good
-    function f2(obj) {
-      const key = Object.prototype.hasOwnProperty.call(obj, 'key') ? obj.key : 1;
-    }
+    const h = function a() {};
     ```
 
   <a name="functions--reassign-params"></a><a name="7.13"></a>
@@ -847,7 +802,7 @@ Other Style Guides
     ```
 
   <a name="functions--signature-invocation-indentation"></a>
-  - [7.15](#functions--signature-invocation-indentation) Functions with multiline signatures, or invocations, should be indented just like every other multiline list in this guide: with each item on a line by itself, with a trailing comma on the last item.
+  - [7.15](#functions--signature-invocation-indentation) Functions with multiline signatures, or invocations, should be indented just like every other multiline list in this guide: with each item on a line by itself, with no trailing comma on the last item.
 
     ```javascript
     // bad
@@ -861,7 +816,7 @@ Other Style Guides
     function foo(
       bar,
       baz,
-      quux,
+      quux
     ) {
       // ...
     }
@@ -875,7 +830,7 @@ Other Style Guides
     console.log(
       foo,
       bar,
-      baz,
+      baz
     );
     ```
 
@@ -1556,8 +1511,6 @@ Other Style Guides
   <a name="variables--define-where-used"></a><a name="13.4"></a>
   - [13.4](#variables--define-where-used) Assign variables where you need them, but place them in a reasonable place.
 
-    > Why? `let` and `const` are block scoped and not function scoped.
-
     ```javascript
     // bad - unnecessary function call
     function checkName(hasName) {
@@ -1625,37 +1578,21 @@ Other Style Guides
     ```
 
   <a name="variables--unary-increment-decrement"></a><a name="13.6"></a>
-  - [13.6](#variables--unary-increment-decrement) Avoid using unary increments and decrements (++, --). eslint [`no-plusplus`](http://eslint.org/docs/rules/no-plusplus)
+  - [13.6](#variables--unary-increment-decrement) When using unary operators (++, --), make sure there's no space between operator and operand. eslint [`space-unary-ops`](http://eslint.org/docs/rules/space-unary-ops)
 
-    > Why? Per the eslint documentation, unary increment and decrement statements are subject to automatic semicolon insertion and can cause silent errors with incrementing or decrementing values within an application. It is also more expressive to mutate your values with statements like `num += 1` instead of `num++` or `num ++`. Disallowing unary increment and decrement statements also prevents you from pre-incrementing/pre-decrementing values unintentionally which can also cause unexpected behavior in your programs.
+    > Why? Per the eslint documentation, unary increment and decrement statements with spaces are subject to automatic semicolon insertion and can cause silent errors with incrementing or decrementing values within an application.
 
     ```javascript
     // bad
-
-    const array = [1, 2, 3];
     let num = 1;
-    num++;
-    --num;
-
-    let sum = 0;
-    let truthyCount = 0;
-    for (let i = 0; i < array.length; i++) {
-      let value = array[i];
-      sum += value;
-      if (value) {
-        truthyCount++;
-      }
-    }
+    num ++;
+    -- num;
 
     // good
-
-    const array = [1, 2, 3];
-    let num = 1;
+    num++;
+    --num;
     num += 1;
     num -= 1;
-
-    const sum = array.reduce((a, b) => a + b, 0);
-    const truthyCount = array.filter(Boolean).length;
     ```
 
 **[⬆ back to top](#table-of-contents)**
@@ -1782,7 +1719,7 @@ Other Style Guides
     ```
 
   <a name="comparison--shortcuts"></a><a name="15.3"></a>
-  - [15.3](#comparison--shortcuts) Use shortcuts for booleans, but explicit comparisons for strings and numbers.
+  - [15.3](#comparison--shortcuts) Use shortcuts for booleans and numbers. Try to stick with explicit comparison for strings but sometimes shortcuts are okay.
 
     ```javascript
     // bad
@@ -1795,23 +1732,23 @@ Other Style Guides
       // ...
     }
 
-    // bad
+    // good
+    if (collection.length) {
+      // ...
+    }
+
+    // also good
+    if (collection.length > 0) {
+      // ...
+    }
+
+    // okay
     if (name) {
       // ...
     }
 
     // good
     if (name !== '') {
-      // ...
-    }
-
-    // bad
-    if (collection.length) {
-      // ...
-    }
-
-    // good
-    if (collection.length > 0) {
       // ...
     }
     ```
@@ -1915,14 +1852,14 @@ Other Style Guides
 ## Blocks
 
   <a name="blocks--braces"></a><a name="16.1"></a>
-  - [16.1](#blocks--braces) Use braces with all multi-line blocks.
+  - [16.1](#blocks--braces) A new block should always start on a new line, and be accompanied by braces. eslint: [`curly`](http://eslint.org/docs/rules/curly)
 
     ```javascript
     // bad
     if (test)
       return false;
 
-    // good
+    // bad
     if (test) return false;
 
     // good
@@ -2052,10 +1989,10 @@ Other Style Guides
     ```
 
   <a name="comments--singleline"></a><a name="17.2"></a>
-  - [18.2](#comments--singleline) Use `//` for single line comments. Place single line comments on a newline above the subject of the comment. Put an empty line before the comment unless it’s on the first line of a block.
+  - [18.2](#comments--singleline) Use `//` for single line comments. Comments that apply to a single line can go on the right of the line as long as the total line length is reasonable. Put an empty line before the comment unless it’s on the first line of a block.
 
     ```javascript
-    // bad
+    // good
     const active = true;  // is current tab
 
     // good
@@ -2662,22 +2599,6 @@ Other Style Guides
   <a name="coercion--explicit"></a><a name="21.1"></a>
   - [22.1](#coercion--explicit) Perform type coercion at the beginning of the statement.
 
-  <a name="coercion--strings"></a><a name="21.2"></a>
-  - [22.2](#coercion--strings)  Strings:
-
-    ```javascript
-    // => this.reviewScore = 9;
-
-    // bad
-    const totalScore = this.reviewScore + ''; // invokes this.reviewScore.valueOf()
-
-    // bad
-    const totalScore = this.reviewScore.toString(); // isn’t guaranteed to return a string
-
-    // good
-    const totalScore = String(this.reviewScore);
-    ```
-
   <a name="coercion--numbers"></a><a name="21.3"></a>
   - [22.3](#coercion--numbers) Numbers: Use `Number` for type casting and `parseInt` always with a radix for parsing strings. eslint: [`radix`](http://eslint.org/docs/rules/radix)
 
@@ -2902,34 +2823,16 @@ Other Style Guides
     ```
 
   <a name="naming--Acronyms-and-Initialisms"></a>
-  - [23.9](#naming--Acronyms-and-Initialisms) Acronyms and initialisms should always be all capitalized, or all lowercased.
-
-    > Why? Names are for readability, not to appease a computer algorithm.
+  - [23.9](#naming--Acronyms-and-Initialisms) Treat acronyms and initialisms in identifiers as normal words. They should be all lower case at the start of a camel-cased identifier, and capitalized (first letter is upper case) in all other scenarios. They should never be all caps.
 
     ```javascript
     // bad
-    import SmsContainer from './containers/SmsContainer';
-
-    // bad
-    const HttpRequests = [
-      // ...
-    ];
+    var SMSHandler;
+    var getHTTPHeader = function() {...};
 
     // good
-    import SMSContainer from './containers/SMSContainer';
-
-    // good
-    const HTTPRequests = [
-      // ...
-    ];
-
-    // best
-    import TextMessageContainer from './containers/TextMessageContainer';
-
-    // best
-    const Requests = [
-      // ...
-    ];
+    var smsHandler;
+    var getHttpHeader;
     ```
 
 **[⬆ back to top](#table-of-contents)**

@@ -1,4 +1,4 @@
-# Airbnb JavaScript Style Guide() {
+# Velocify Ecmascript 6 Style Guide() {
 Other Style Guides
 
   - [ES5 (Deprecated)](https://github.com/velocify/javascript/es5)
